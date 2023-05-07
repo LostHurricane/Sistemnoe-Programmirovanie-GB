@@ -15,6 +15,8 @@ public class UIController : MonoBehaviour
     [SerializeField]
     private Button buttonDisconnectClient;
     [SerializeField]
+    private TMP_InputField nameInputField;
+    [SerializeField]
     private Button buttonSendMessage;
     [SerializeField]
     private TMP_InputField inputField;
@@ -45,6 +47,7 @@ public class UIController : MonoBehaviour
     }
     private void Connect()
     {
+        client.ClientName = nameInputField.text;
         client.Connect();
     }
     private void Disconnect()

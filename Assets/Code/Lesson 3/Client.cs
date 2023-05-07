@@ -6,6 +6,8 @@ using UnityEngine.Networking;
 
 public class Client : MonoBehaviour
 {
+    public string ClientName;
+
     public delegate void OnMessageReceive(object message);
     public event OnMessageReceive onMessageReceive;
     private const int MAX_CONNECTION = 10;
@@ -27,7 +29,9 @@ public class Client : MonoBehaviour
         hostID = NetworkTransport.AddHost(topology, port);
         connectionID = NetworkTransport.Connect(hostID, "127.0.0.1", serverPort, 0, out error);
         if ((NetworkError)error == NetworkError.Ok)
+        {
             isConnected = true;
+        }
         else
             Debug.Log((NetworkError)error);
     }
@@ -66,6 +70,7 @@ public class Client : MonoBehaviour
                     break;
                 case NetworkEventType.ConnectEvent:
                     onMessageReceive?.Invoke($"You have been connected to server.");
+                    SendMessage(ClientName);
                     Debug.Log($"You have been connected to server.");
                     break;
                 case NetworkEventType.DataEvent:

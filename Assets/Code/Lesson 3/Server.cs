@@ -13,7 +13,7 @@ public class Server : MonoBehaviour
     private int reliableChannel;
     private bool isStarted = false;
     private byte error;
-    List<int> connectionIDs = new List<int>();
+    Dictionary<int, string> connectionIDs = new Dictionary<int, string>();
 
     public void StartServer()
     {
@@ -46,9 +46,9 @@ public class Server : MonoBehaviour
 
     public void SendMessageToAll(string message)
     {
-        for (int i = 0; i < connectionIDs.Count; i++)
+        foreach (var value in connectionIDs)
         {
-            SendMessage(message, connectionIDs[i]);
+            SendMessage(message, value.Key);
         }
     }
 
@@ -71,19 +71,28 @@ public class Server : MonoBehaviour
                 case NetworkEventType.Nothing:
                     break;
                 case NetworkEventType.ConnectEvent:
-                    connectionIDs.Add(connectionId);
-                    SendMessageToAll($"Player {connectionId} has connected.");
-                    Debug.Log($"Player {connectionId} has connected.");
+                    connectionIDs.Add(connectionId, "");
+                    SendMessageToAll($"Player Id {connectionId} has connected.");
+                    Debug.Log($"Player Id {connectionId} has connected.");
                     break;
                 case NetworkEventType.DataEvent:
                     string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
-                    SendMessageToAll($"Player {connectionId}: {message}");
-                    Debug.Log($"Player {connectionId}: {message}");
+                    if (connectionIDs[connectionId] == "")
+                    {
+                        connectionIDs[connectionId] = message;
+                        SendMessageToAll($"Player Id {connectionId} Set name to {connectionIDs[connectionId]}.");
+                        Debug.Log($"Player Id {connectionId} Set name to {connectionIDs[connectionId]}.");
+                    }
+                    else
+                    {
+                        SendMessageToAll($"Player {connectionIDs[connectionId]}: {message}");
+                        Debug.Log($"Player {connectionIDs[connectionId]}: {message}");
+                    }
                     break;
                 case NetworkEventType.DisconnectEvent:
                     connectionIDs.Remove(connectionId);
-                    SendMessageToAll($"Player {connectionId} has disconnected.");
-                    Debug.Log($"Player {connectionId} has disconnected.");
+                    SendMessageToAll($"Player {connectionIDs[connectionId]} has disconnected.");
+                    Debug.Log($"Player {connectionIDs[connectionId]} has disconnected.");
                     break;
                 case NetworkEventType.BroadcastEvent:
                     break;
