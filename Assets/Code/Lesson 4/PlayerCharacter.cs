@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class PlayerCharacter : Character
 {
@@ -10,7 +11,7 @@ public class PlayerCharacter : Character
     private const float _gravity = -9.8f;
     private CharacterController _characterController;
     private MouseLook _mouseLook;
-    private Vector3 _currentVelocity;
+    //private Vector3 _currentVelocity;
     protected override FireAction _fireAction { get; set; }
     
     
@@ -46,12 +47,14 @@ public class PlayerCharacter : Character
             movement = transform.TransformDirection(movement);
             _characterController.Move(movement);
             _mouseLook.Rotation();
-            CmdUpdatePosition(transform.position);
+            //CmdUpdatePosition(transform.position);
         }
+        /*
         else
         {
             transform.position = Vector3.SmoothDamp(transform.position, serverPosition, ref _currentVelocity, _movingSpeed * Time.deltaTime);
         }
+        */
     }
 
     private void Start()
