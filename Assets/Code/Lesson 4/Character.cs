@@ -9,7 +9,6 @@ public abstract class Character : NetworkBehaviour
 {
     protected Action OnUpdateAction { get; set; }
     protected abstract FireAction _fireAction { get; set; }
-    [SyncVar] protected Vector3 serverPosition;
     
     protected virtual void Initiate()
     {
@@ -22,12 +21,6 @@ public abstract class Character : NetworkBehaviour
     private void OnUpdate()
     {
         OnUpdateAction?.Invoke();
-    }
-
-    [Command]
-    protected void CmdUpdatePosition(Vector3 position)
-    {
-        serverPosition = position;
     }
 
     public abstract void Movement();

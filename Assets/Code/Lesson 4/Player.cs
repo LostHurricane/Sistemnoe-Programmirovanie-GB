@@ -19,7 +19,7 @@ public class Player : NetworkBehaviour
             return;
         }
 
-        _playerCharacter = Instantiate(_playerPrefab);
+        _playerCharacter = Instantiate(_playerPrefab, transform.position, transform.rotation);
 
         NetworkServer.SpawnWithClientAuthority(_playerCharacter, connectionToClient);
     }
